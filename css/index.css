@@ -1,0 +1,47 @@
+/*
+Author: Callum Taylor
+Filename: index.css
+License: MIT Open Source License
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+axisWhite line {
+    stroke-opacity: 0.5;
+}
+
+.axisWhite path {
+    stroke-opacity: 0.5;
+}
+
+.axisWhite text {
+    fill: white;
+}
+
+.lineBlue {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.linePink {
+    fill: none;
+    stroke: magenta;
+    stroke-width: 2px;
+}
+
+#xAxis .tick line {
+    visibility: hidden;
+}
+
+.selected {
+    fill: greenyellow !important;
+}
+
+.swatch {
+    fill-opacity: .30;
+}
