@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+axisWhite line {
+    stroke-opacity: 0.5;
+}
+
+.axisWhite path {
+    stroke-opacity: 0.5;
+}
+
+.axisWhite text {
+    fill: white;
+}
+
+#xAxis .tick line {
+    visibility: hidden;
+}
+
+.selected {
+    fill: greenyellow !important;
+}
+
+.swatch {
+    fill-opacity: .30;
+}
+
+.wrapper, nav {
+    background-color: #f9f9f9;
+}
+
+.white {
+    background-color: #f9f9f9;
+}
+
+.pink {
+    background-color: #e01fc4;
+}

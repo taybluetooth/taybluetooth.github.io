@@ -1,0 +1,81 @@
+<!--
+Author: Callum Taylor
+Filename: lab4.html
+License: MIT Open Source License
+-->
+
+<!DOCTYPE html>
+
+<html>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <head>
+    <!-- import d3.js version 7 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+
+    <!-- import tailwind and other stylesheets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./lab4.css" rel="stylesheet" type="text/css" />
+    <!-- import font awesome-->
+    <script
+      src="https://kit.fontawesome.com/339b6d0017.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div class="wrapper h-screen w-full">
+      <!-- navbar-->
+      <nav>
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <div class="relative flex items-center justify-between h-20">
+            <div
+              class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start"
+            >
+              <div class="flex-shrink-0 flex items-center">
+                <img
+                  class="block h-20 w-auto"
+                  src="./assets/logo.PNG"
+                  alt="Taylor Analytics"
+                />
+              </div>
+            </div>
+            <div
+              class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
+            >
+              <!-- navbar links -->
+              <div class="ml-3 relative">
+                <div class="hidden sm:block sm:ml-6">
+                  <div class="flex space-x-4">
+                    <a
+                      href="#"
+                      class="bg-pink-600 text-white px-3 py-2 rounded-md text-sm font-medium"
+                      aria-current="page"
+                      >Dashboard</a
+                    >
+
+                    <a
+                      href="https://github.com/taybluetooth/f21dv-lab-3"
+                      class="text-pink-300 hover:bg-pink-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >Github</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="world-map white mr-3">
+        <row class="cases-lc-row inline-flex">
+          <h2 class="text-white font-bold p-3">Global Map of Total Cases</h2>
+        </row>
+      </div>
+    </div>
+  </body>
+  <script src="./js/worldmap.js"></script>
+  <script src="./js/linechart.js"></script>
+</html>
