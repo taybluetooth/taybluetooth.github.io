@@ -1,26 +1,47 @@
+arr = []
+
 // callback function when selecting country
 function selectCountry(country) {
   d3.select(".selected").classed("selected", false);
   d3.select(`[name=${country.replace(/\s/g, "")}]`).classed("selected", true);
-  d3.select("select").property("value", country);
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].country === country) {
+      updateProgress(parseFloat(arr[i].worldshare.replace('%','')/100))
+      (function loops() {
+        var progress = parseFloat(arr[i].worldshare.replace('%','')/100)
+        updateProgress(progress)
+      
+        if (count > 0) {
+          count--;
+          progress += step;
+          setTimeout(loops, 10);
+        }
+      })();
+    }
+  }
 }
 
 // declare map constants
 const mapWidth = 600;
-const mapHeight = 498;
+const mapHeight = 500;
 const map = d3
   .select(".world-map")
   .append("svg")
   .attr("class", "white")
   .attr("width", mapWidth)
-  .attr("height", mapHeight); //track where user clicked down
+  .attr("height", mapHeight);
+const legendSvg = d3
+  .select(".world-map")
+  .append("svg")
+  .attr("class", "white")
+  .attr("width", 300)
+  .attr("height", 400); // //track where user clicked down
 const projection = d3
   .geoMercator()
   .scale(100)
-  .translate([mapWidth / 2, mapHeight / 1.4]);
+  .translate([mapWidth / 2, mapHeight / 1.8]);
 const path = d3.geoPath(projection);
 const mapG = map.append("g");
-
 
 function createMap() {
   d3.json(
@@ -47,7 +68,7 @@ function createMap() {
         return "country" + d.id;
       })
       .style("fill", function (d) {
-        return d3.schemePurples[8][Math.floor(Math.random() * (5 + 1) + 1)];
+        return d3.schemeBlues[6][Math.floor(Math.random() * (3 + 1) + 1)];
       })
       .style("stroke", "black")
       .style("stroke-width", "0.1")
@@ -57,7 +78,10 @@ function createMap() {
   d3.json(
     "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/coordinates.json"
   ).then((data) => {
-    console.log(data)
+    for (var i = 0; i < data.length; i++) {
+      arr.push(data[i]);
+    }
+
     var scaleCircle = d3
       .scaleSqrt()
       .domain(
@@ -65,17 +89,25 @@ function createMap() {
           return parseInt(d.population);
         })
       )
-      .range([0, 20]);
+      .range([2, 20]);
 
     var scaleColor = d3
-      .scaleQuantize()
+      .scaleQuantile()
       .domain(
         d3.extent(data, function (d) {
           return parseInt(d.population);
         })
       )
-      .range(["#ecca00", "#ec9b00", "#ec5300", "#ec2400", "#ec0000"]);
+      .range(["blue", "purple", "orange", "red", "darkred"]);
 
+    var legend = d3
+      .legendColor()
+      .scale(scaleColor)
+      .labelFormat(d3.format(".2s"))
+      .shape("circle")
+      .title("Population Count");
+
+    legendSvg.append("g").attr("transform", "translate(50,150)").call(legend);
 
     setTimeout(function () {
       var circle = mapG
@@ -98,15 +130,15 @@ function createMap() {
         })
         .on("click", function (d, i) {
           selectCountry(i.country);
-          console.log(i.population)
+          console.log(i.population);
         })
         .style("fill", function (d) {
-          return scaleColor(d.population)
+          return scaleColor(d.population);
         })
-        .style("fill-opacity", ".30")
+        .style("fill-opacity", ".50")
         .attr("z-index", "9999 !important");
     }, 500);
-  })
+  });
 }
 
 // handle zoom and panning
