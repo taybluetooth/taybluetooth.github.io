@@ -4,7 +4,7 @@ const POPDATA = d3.csv(
 );
 
 const LOCATIONDATA = d3.json(
-  "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/lat-long.json"
+  "https://raw.githubusercontent.com/taybluetooth/f21dv-lab-3/main/data/lat-long.json"
 );
 
 // global array for population
@@ -17,19 +17,17 @@ const PREPROCESS = () => {
       population.push(value[i]);
     }
   });
+  console.log(population)
 
+  temp = [];
   // use location data and merge into singular entity.
   LOCATIONDATA.then((data) => {
     data.forEach(function (d) {
-      population.forEach(function (element) {
-        element.latitude = d.latitude;
-        element.longitude = d.longitude;
-      });
+      let obj = population.find((o) => o.country === d.country);
+      obj.latitude = d.latitude;
+      obj.longitude = d.longitude;
+      temp.push(obj);
     });
   });
+  return temp;
 };
-
-function getPopulationData() {
-  PREPROCESS();
-  return population;
-}

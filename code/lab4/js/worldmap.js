@@ -53,16 +53,15 @@ function createMap() {
       .style("stroke-width", "0.1")
       .attr("d", path);
   });
-  console.log(population)
 
   d3.json(
-    "https://raw.githubusercontent.com/taybluetooth/f21dv-lab-3/main/data/lat-long.json"
+    "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/lat-long.json"
   ).then((data) => {
     var scaleCircle = d3
       .scaleSqrt()
       .domain(
         d3.extent(data, function (d) {
-          return parseInt(d.cases);
+          return parseInt(d.population);
         })
       )
       .range([0, 0.5]);
@@ -86,14 +85,16 @@ function createMap() {
           return projection([d.longitude, d.latitude])[0];
         })
         .attr("cy", function (d) {
+          console.log(d.latitude)
           return projection([d.longitude, d.latitude])[1];
         })
         .attr("r", function (d) {
           // find better way to scale
-          return scaleCircle(d.cases);
+          return scaleCircle(d.population);
         })
         .on("click", function (d, i) {
           selectCountry(i.country);
+          console.log(d.country)
         })
         .style("fill", function (d) {
           return "red"
