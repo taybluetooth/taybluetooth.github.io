@@ -65,13 +65,17 @@ function createMap() {
           return parseInt(d.population);
         })
       )
-      .range([0, 0.5]);
+      .range([0, 20]);
 
-    /*var scaleColor = d3
+    var scaleColor = d3
       .scaleQuantize()
-      .domain([0, 10000000])
+      .domain(
+        d3.extent(data, function (d) {
+          return parseInt(d.population);
+        })
+      )
       .range(["#ecca00", "#ec9b00", "#ec5300", "#ec2400", "#ec0000"]);
-*/
+
 
     setTimeout(function () {
       var circle = mapG
@@ -94,10 +98,10 @@ function createMap() {
         })
         .on("click", function (d, i) {
           selectCountry(i.country);
-          console.log(d.country)
+          console.log(i.population)
         })
         .style("fill", function (d) {
-          return "red"
+          return scaleColor(d.population)
         })
         .style("fill-opacity", ".30")
         .attr("z-index", "9999 !important");
