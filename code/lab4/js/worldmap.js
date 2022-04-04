@@ -55,8 +55,9 @@ function createMap() {
   });
 
   d3.json(
-    "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/lat-long.json"
+    "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/coordinates.json"
   ).then((data) => {
+    console.log(data)
     var scaleCircle = d3
       .scaleSqrt()
       .domain(
@@ -85,7 +86,6 @@ function createMap() {
           return projection([d.longitude, d.latitude])[0];
         })
         .attr("cy", function (d) {
-          console.log(d.latitude)
           return projection([d.longitude, d.latitude])[1];
         })
         .attr("r", function (d) {
