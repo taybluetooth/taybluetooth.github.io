@@ -24,9 +24,12 @@ const PREPROCESS = () => {
   LOCATIONDATA.then((data) => {
     data.forEach(function (d) {
       let obj = population.find((o) => o.country === d.country);
-      obj.latitude = d.latitude;
+      if(obj) {
+        obj.latitude = d.latitude;
       obj.longitude = d.longitude;
       temp.push(obj);
+      console.log(obj)
+      }
     });
   });
   return temp;
