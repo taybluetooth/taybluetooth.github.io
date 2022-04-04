@@ -8,24 +8,19 @@ function selectCountry(country) {
 // declare map constants
 const mapWidth = 600;
 const mapHeight = 498;
-
 const map = d3
   .select(".world-map")
   .append("svg")
   .attr("class", "white")
   .attr("width", mapWidth)
   .attr("height", mapHeight); //track where user clicked down
-
 const projection = d3
   .geoMercator()
   .scale(100)
   .translate([mapWidth / 2, mapHeight / 1.4]);
-
 const path = d3.geoPath(projection);
-
 const mapG = map.append("g");
 
-const colorScale = d3.scaleOrdinal().range(["#FF0000", "#009933" , "#0000FF"]);
 
 function createMap() {
   d3.json(
@@ -52,7 +47,7 @@ function createMap() {
         return "country" + d.id;
       })
       .style("fill", function (d) {
-        return d3.schemeBlues[8][Math.floor(Math.random() * (3 - 1 + 1) + 1)];
+        return d3.schemePurples[8][Math.floor(Math.random() * (5 + 1) + 1)];
       })
       .style("stroke", "black")
       .style("stroke-width", "0.1")
