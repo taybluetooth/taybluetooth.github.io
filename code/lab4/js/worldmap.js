@@ -53,6 +53,7 @@ function createMap() {
       .style("stroke-width", "0.1")
       .attr("d", path);
   });
+  console.log(population)
 
   d3.json(
     "https://raw.githubusercontent.com/taybluetooth/f21dv-lab-3/main/data/lat-long.json"
@@ -61,15 +62,16 @@ function createMap() {
       .scaleSqrt()
       .domain(
         d3.extent(data, function (d) {
-          return d.cases;
+          return parseInt(d.cases);
         })
       )
       .range([0, 0.5]);
 
-    var scaleColor = d3
+    /*var scaleColor = d3
       .scaleQuantize()
       .domain([0, 10000000])
       .range(["#ecca00", "#ec9b00", "#ec5300", "#ec2400", "#ec0000"]);
+*/
 
     setTimeout(function () {
       var circle = mapG
@@ -94,12 +96,12 @@ function createMap() {
           selectCountry(i.country);
         })
         .style("fill", function (d) {
-          return scaleColor(d.cases);
+          return "red"
         })
         .style("fill-opacity", ".30")
         .attr("z-index", "9999 !important");
     }, 500);
-  });
+  })
 }
 
 // handle zoom and panning
