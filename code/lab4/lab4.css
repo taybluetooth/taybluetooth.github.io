@@ -21,7 +21,7 @@ axisWhite line {
 }
 
 .selected {
-    fill: greenyellow !important;
+    fill: #B122B7 !important;
 }
 
 .swatch {
@@ -29,13 +29,17 @@ axisWhite line {
 }
 
 .wrapper, nav {
-    background-color: #f9f9f9;
+    background-color: #0F111E;
 }
 
 .white {
-    background-color: #f9f9f9;
+    background-color: #0F111E;
 }
 
-.pink {
-    background-color: #e01fc4;
+.gradient {
+    background-color: linear-gradient(to bottom right, #2E84C6, #B122B7); !important;;
+}
+
+.label, .legendTitle {
+    fill: white;
 }
