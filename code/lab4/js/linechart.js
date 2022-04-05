@@ -29,7 +29,7 @@ var cases = [];
 
 const CREATELINECHART = (country, arr, svg) => {
   d3.csv(
-    "https://raw.githubusercontent.com/taybluetooth/f21dv-lab-3/main/data/owid-covid-data.csv"
+    "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/population_total_long.csv"
   ).then((value) => {
     // load csv values into a preprocessing array
     for (var i = 0; i < value.length; i++) {
