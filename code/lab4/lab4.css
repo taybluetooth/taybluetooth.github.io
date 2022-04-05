@@ -16,9 +16,22 @@ axisWhite line {
     fill: white;
 }
 
+.lineBlue {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.linePink {
+    fill: none;
+    stroke: magenta;
+    stroke-width: 2px;
+}
+
 #xAxis .tick line {
     visibility: hidden;
 }
+
 
 .selected {
     fill: #B122B7 !important;
