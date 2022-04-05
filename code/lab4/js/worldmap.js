@@ -2,15 +2,16 @@ arr = []
 
 // callback function when selecting country
 function selectCountry(country) {
-  d3.select(".selected").classed("selected", false);
-  d3.select(`[name=${country.replace(/\s/g, "")}]`).classed("selected", true);
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].country === country) {
       UPDATEPIE("worldshare", parseFloat(arr[i].worldshare.replace('%','')/100))
       UPDATEPIE("urbanpops", parseFloat(arr[i].urbanPopPercentage.replace('%','')/100))
       UPDATEPIE("yearly", parseFloat(arr[i].yearly.replace('%','')/100))
+      UPDATELINECHART(country, cases, svg);
     }
   }
+  d3.select(".selected").classed("selected", false);
+  d3.select(`[name=${country.replace(/\s/g, "")}]`).classed("selected", true);
 }
 
 // declare map constants
@@ -19,13 +20,13 @@ const mapHeight = 500;
 const map = d3
   .select(".world-map")
   .append("svg")
-  .attr("class", "white")
+  .attr("class", "bg-gray-800")
   .attr("width", mapWidth)
   .attr("height", mapHeight);
 const legendSvg = d3
   .select(".world-map")
   .append("svg")
-  .attr("class", "white")
+  .attr("class", "bg-gray-800")
   .attr("width", 300)
   .attr("height", 400); // //track where user clicked down
 const projection = d3

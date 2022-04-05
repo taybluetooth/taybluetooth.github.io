@@ -33,32 +33,32 @@ const CREATELINECHART = (country, arr, svg) => {
   ).then((value) => {
     // load csv values into a preprocessing array
     for (var i = 0; i < value.length; i++) {
-      if (value[i].location === country) {
+      if (value[i].country === country) {
         arr.push(value[i]);
       }
     }
 
     // format the data
     arr.forEach(function (d) {
-      d.date = new Date(d.date);
-      d.new_cases = +d.new_cases;
+      d.year = new Date(d.year);
+      d.count = +d.count;
     });
 
     arr.sort(function (a, b) {
       // turn strings into dates
-      return new Date(b.date) - new Date(a.date);
+      return new Date(b.year) - new Date(a.year);
     });
 
     // cale the range of the data
     x.domain(
       d3.extent(arr, function (d) {
-        return d.date;
+        return d.year;
       })
     ).range([0, WIDTH]);
     y.domain([
       0,
       d3.max(arr, function (d) {
-        return d.new_cases;
+        return d.count;
       }),
     ]).range([HEIGHT - MARGIN.bottom, MARGIN.top]);
 
@@ -66,10 +66,10 @@ const CREATELINECHART = (country, arr, svg) => {
     var valueLine = d3
       .line()
       .x(function (d) {
-        return x(d.date);
+        return x(d.year);
       })
       .y(function (d) {
-        return y(d.new_cases);
+        return y(d.count);
       });
 
     // add the case line path.
@@ -86,7 +86,7 @@ const CREATELINECHART = (country, arr, svg) => {
     svg
       .append("g")
       .attr("transform", `translate(0,${HEIGHT - MARGIN.bottom})`)
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b %y")).ticks(12))
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks(12))
       .attr("id", "xAxis")
       .attr("class", "axisWhite")
       .call((g) => g.selectAll(".tick text"));
@@ -108,5 +108,93 @@ const CREATELINECHART = (country, arr, svg) => {
       );
   });
 };
+
+const UPDATELINECHART = (selectedGroup, arr, svg) => {
+    d3.csv(
+        "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/population_total_long.csv"
+      ).then((value) => {
+
+      arr = [];
+
+      for (var i = 0; i < value.length; i++) {
+        if (value[i].country === selectedGroup) {
+          arr.push(value[i]);
+        }
+      }
+
+      if (arr.length == 0) {
+        arr.push({ year: new Date(), count: 0 });
+      }
+
+      arr.forEach(function (d) {
+        d.year = new Date(d.year);
+        d.count = +d.count;
+      });
+
+      arr.sort(function (a, b) {
+        // turn strings into dates
+        return new Date(b.year) - new Date(a.year);
+      });
+
+      // calc the range of the data
+      x.domain(
+        d3.extent(arr, function (d) {
+          return d.year;
+        })
+      ).range([0, WIDTH]);
+      y.domain([
+        0,
+        d3.max(arr, function (d) {
+          return d.count;
+        }),
+      ]).range([HEIGHT - MARGIN.bottom, MARGIN.top]);
+
+      svg
+        .selectAll("#xAxis")
+        .transition()
+        .duration(1000)
+        .ease(d3.easeCubicInOut)
+        .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks())
+        .attr("class", "axisWhite")
+        .call((g) => g.selectAll(".tick text"));
+
+      svg
+        .selectAll("#yAxis")
+        .transition()
+        .duration(1000)
+        .ease(d3.easeCubicInOut)
+        .call(d3.axisRight(y).tickSize(WIDTH))
+        .call((g) => g.select(".domain").remove())
+        .call((g) =>
+          g
+            .selectAll(".tick:not(:first-of-type) line")
+            .attr("stroke-opacity", 0.5)
+            .attr("stroke-dasharray", "2,2")
+        )
+        .call((g) =>
+          g.selectAll(".tick text").attr("x", 4).attr("color", "white")
+        );
+
+      // Give these new data to update line
+      svg
+        .select("path")
+        .data([arr])
+        .transition()
+        .duration(1000)
+        .ease(d3.easeCubicInOut)
+        .attr(
+          "d",
+          d3
+            .line()
+            .x(function (d) {
+              return x(d.year);
+            })
+            .y(function (d) {
+              return y(d.count);
+            })
+        )
+        .attr("stroke", "blue");
+    });
+  }
 
 CREATELINECHART("Afghanistan", cases, svg);
