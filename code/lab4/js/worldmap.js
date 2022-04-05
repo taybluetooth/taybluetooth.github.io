@@ -38,7 +38,7 @@ const mapG = map.append("g");
 
 function createMap() {
   d3.json(
-    "https://raw.githubusercontent.com/taybluetooth/f21dv-lab-3/main/data/countries.json"
+    "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/countries.json"
   ).then((data) => {
     const countries = topojson.feature(data, data.objects.countries);
     mapG
