@@ -6,17 +6,9 @@ function selectCountry(country) {
   d3.select(`[name=${country.replace(/\s/g, "")}]`).classed("selected", true);
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].country === country) {
-      updateProgress(parseFloat(arr[i].worldshare.replace('%','')/100))
-      (function loops() {
-        var progress = parseFloat(arr[i].worldshare.replace('%','')/100)
-        updateProgress(progress)
-      
-        if (count > 0) {
-          count--;
-          progress += step;
-          setTimeout(loops, 10);
-        }
-      })();
+      UPDATEPIE("worldshare", parseFloat(arr[i].worldshare.replace('%','')/100))
+      UPDATEPIE("urbanpops", parseFloat(arr[i].urbanPopPercentage.replace('%','')/100))
+      UPDATEPIE("yearly", parseFloat(arr[i].yearly.replace('%','')/100))
     }
   }
 }
@@ -54,7 +46,7 @@ function createMap() {
       .enter()
       .append("path")
       .attr("class", function (d) {
-        return d.properties.name == "Afghanistan"
+        return d.properties.name == "China"
           ? `selected ${d.properties.name.replace(/\s/g, "")}`
           : d.properties.name.replace(/\s/g, "");
       })
