@@ -33,6 +33,3 @@ const PREPROCESS = () => {
   });
   return temp;
 };
-
-PREPROCESS();
-console.log(population)

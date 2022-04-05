@@ -7,7 +7,8 @@ function selectCountry(country) {
       UPDATEPIE("worldshare", parseFloat(arr[i].worldshare.replace('%','')/100))
       UPDATEPIE("urbanpops", parseFloat(arr[i].urbanPopPercentage.replace('%','')/100))
       UPDATEPIE("yearly", parseFloat(arr[i].yearly.replace('%','')/100))
-      UPDATELINECHART(country, cases, svg);
+      UPDATELINECHART(country, pops, svg);
+      UPDATEINDICATOR(country, pops)
     }
   }
   d3.select(".selected").classed("selected", false);
