@@ -3,6 +3,7 @@ const POPDATA = d3.csv(
   "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/population.csv"
 );
 
+// read location data as json file
 const LOCATIONDATA = d3.json(
   "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/lat-long.json"
 );
@@ -10,6 +11,7 @@ const LOCATIONDATA = d3.json(
 // global array for population
 var population = [];
 
+// helper method used to pre load data and return as an array
 const PREPROCESS = () => {
   POPDATA.then((value) => {
     // load csv values into a preprocessing array.

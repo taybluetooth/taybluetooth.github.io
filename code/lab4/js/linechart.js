@@ -1,6 +1,12 @@
 // declare global values
+
+// declare line charts dimensions
 const WIDTH = 600;
 const HEIGHT = 400;
+const MINIWIDTH = 600;
+const MINIHEIGHT = 240;
+
+// declare margin values
 const MARGIN = {
   top: 20,
   right: 30,
@@ -8,15 +14,20 @@ const MARGIN = {
   left: 80,
 };
 
+// initialise csv
+const csv = d3.csv(
+  "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/population_total_long.csv"
+);
+
+// temp storage array
+var pops = [];
+
 // set the ranges
 var x = d3.scaleTime().range([0, WIDTH]);
 var y = d3.scaleLinear().range([HEIGHT, 0]);
 var line, line2;
 
-// append the svg obgect to the body of the page
-// appends a 'group' element to 'svg'
-// moves the 'group' element to the top left margin
-
+// append line chart svg to html
 var svg = d3
   .select(".linechart")
   .append("svg")
@@ -25,17 +36,13 @@ var svg = d3
   .append("g")
   .attr("transform", "translate(" + MARGIN.left + "," + MARGIN.top + ")");
 
-var pops = [];
+// add label text for line chart
+d3.select(".linechart")
+  .append("h1")
+  .text("Graph Navigator")
+  .classed("text-white pl-10", true);
 
-const csv = d3.csv(
-  "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/population_total_long.csv"
-);
-
-const MINIWIDTH = 600;
-const MINIHEIGHT = 240;
-
-d3.select(".linechart").append("h1").text("Graph Navigator").classed("text-white pl-10", true)
-
+// append navigator chart to html
 var mini = d3
   .select(".linechart")
   .append("svg")
@@ -44,10 +51,11 @@ var mini = d3
   .append("g")
   .attr("transform", "translate(" + MARGIN.left + "," + MARGIN.top + ")");
 
+// declare ranges for navigator
 var miniX = d3.scaleTime().range([0, MINIWIDTH]);
 var miniY = d3.scaleLinear().range([MINIHEIGHT, 0]);
 
-// CREATE LINE CHART METHOD
+// create a linechart given a country, data and an svg element
 
 const CREATELINECHART = (country, arr, svg) => {
   csv.then((value) => {
@@ -69,7 +77,7 @@ const CREATELINECHART = (country, arr, svg) => {
       return new Date(b.year) - new Date(a.year);
     });
 
-    // cale the range of the data
+    // calculate the range of the data
     x.domain(
       d3.extent(arr, function (d) {
         return d.year;
@@ -117,6 +125,7 @@ const CREATELINECHART = (country, arr, svg) => {
       .call(d3.axisRight(y).tickSize(WIDTH))
       .attr("id", "yAxis")
       .call((g) => g.select(".domain").remove())
+      // format axis to dotted lines
       .call((g) =>
         g
           .selectAll(".tick:not(:first-of-type) line")
@@ -129,27 +138,33 @@ const CREATELINECHART = (country, arr, svg) => {
   });
 };
 
-// UPDATE LINE CHART METHOD
+// method which updates linechart given a country, data and svg element
 
 const UPDATELINECHART = (selectedGroup, arr, svg) => {
+  // read csv file
   csv.then((value) => {
+    // reset temp storage
     arr = [];
 
+    // if selected country matches any in storage, add it to temp array
     for (var i = 0; i < value.length; i++) {
       if (value[i].country === selectedGroup) {
         arr.push(value[i]);
       }
     }
 
+    // else create empty data to avoid errors
     if (arr.length == 0) {
       arr.push({ year: new Date(), count: 0 });
     }
 
+    // format data for parsing
     arr.forEach(function (d) {
       d.year = new Date(d.year);
       d.count = +d.count;
     });
 
+    // sort data by year
     arr.sort(function (a, b) {
       // turn strings into years
       return new Date(b.year) - new Date(a.year);
@@ -168,6 +183,7 @@ const UPDATELINECHART = (selectedGroup, arr, svg) => {
       }),
     ]).range([HEIGHT - MARGIN.bottom, MARGIN.top]);
 
+    // update x axis
     svg
       .selectAll("#xAxis")
       .transition()
@@ -177,6 +193,7 @@ const UPDATELINECHART = (selectedGroup, arr, svg) => {
       .attr("class", "axisWhite")
       .call((g) => g.selectAll(".tick text"));
 
+    // update y axis
     svg
       .selectAll("#yAxis")
       .transition()
@@ -194,7 +211,7 @@ const UPDATELINECHART = (selectedGroup, arr, svg) => {
         g.selectAll(".tick text").attr("x", -70).attr("color", "white")
       );
 
-    // Give these new data to upyear line
+    // update line's path
     svg
       .select("path")
       .data([arr])
@@ -216,6 +233,7 @@ const UPDATELINECHART = (selectedGroup, arr, svg) => {
   });
 };
 
+// create navigator chart given a country
 const CREATEINDICATOR = (country) => {
   csv.then((value) => {
     // load csv values into a preprocessing array
@@ -225,6 +243,7 @@ const CREATEINDICATOR = (country) => {
       }
     }
 
+    // declare brush to be mutable only on x axis
     var brush = d3
       .brushX()
       .extent([
@@ -239,12 +258,13 @@ const CREATEINDICATOR = (country) => {
       d.count = +d.count;
     });
 
+    // sort data by years
     pops.sort(function (a, b) {
       // turn strings into years
       return new Date(b.year) - new Date(a.year);
     });
 
-    // cale the range of the data
+    // calc the range of the data
     miniX
       .domain(
         d3.extent(pops, function (d) {
@@ -281,10 +301,11 @@ const CREATEINDICATOR = (country) => {
       .attr("d", valueLine)
       .attr("class", "lineBlue");
 
+    // bind brushing method to line and chart itself
     line2.append("g").attr("class", "brush").call(brush);
-
     mini.append("g").attr("class", "brush").call(brush);
 
+    // callback function if brushing event fired
     function brushed(event) {
       const selection = event.selection;
       // If no selection, back to initial coordinate. Otherwise, update X axis domain
@@ -294,7 +315,8 @@ const CREATEINDICATOR = (country) => {
         });
       } else {
         x.domain([x.invert(selection[0]), x.invert(selection[1])]);
-        mini.select(".brush").call(brush.move, null); // This remove the grey brush area as soon as the selection has been done
+        // this removes the grey brush area as soon as the selection has been done
+        mini.select(".brush").call(brush.move, null);
       }
 
       // update axis and line position
@@ -346,30 +368,37 @@ const CREATEINDICATOR = (country) => {
       );
   });
 
-  d3.select(".linechart").append("button").text("reset").classed("ml-3 bg-gray-900 text-white p-2 w-20", true).on("click", function(d) {
-    x.domain(
-      d3.extent(pops, function (d) {
-        return d.year;
-      })
-    );
-    d3.select("#xAxis").transition().duration(1000).call(d3.axisBottom(x));
-    line.transition()
-    .duration(1000).attr(
-      "d",
-      d3
-        .line()
-        .x(function (d) {
-          return x(d.year);
+  // add a reset button which resets domains of charts
+  d3.select(".linechart")
+    .append("button")
+    .text("reset")
+    .classed("ml-3 bg-gray-900 text-white p-2 w-20", true)
+    .on("click", function (d) {
+      x.domain(
+        d3.extent(pops, function (d) {
+          return d.year;
         })
-        .y(function (d) {
-          return y(d.count);
-        })
-    );
-  });
-}
+      );
+      d3.select("#xAxis").transition().duration(1000).call(d3.axisBottom(x));
+      line
+        .transition()
+        .duration(1000)
+        .attr(
+          "d",
+          d3
+            .line()
+            .x(function (d) {
+              return x(d.year);
+            })
+            .y(function (d) {
+              return y(d.count);
+            })
+        );
+    });
+};
 
+// method which updates navigator chart if new country selected
 const UPDATEINDICATOR = (country) => {
-
   csv.then((value) => {
     pops = [];
 
@@ -390,6 +419,7 @@ const UPDATEINDICATOR = (country) => {
       d.count = +d.count;
     });
 
+    // sort data by years
     pops.sort(function (a, b) {
       // turn strings into years
       return new Date(b.year) - new Date(a.year);
@@ -412,6 +442,7 @@ const UPDATEINDICATOR = (country) => {
       ])
       .range([MINIHEIGHT - MARGIN.bottom, MARGIN.top]);
 
+    // update navigator x axis
     mini
       .selectAll("#miniXAxis")
       .transition()
@@ -421,6 +452,7 @@ const UPDATEINDICATOR = (country) => {
       .attr("class", "axisWhite")
       .call((g) => g.selectAll(".tick text"));
 
+    // update navigator y axis
     mini
       .selectAll("#miniYAxis")
       .transition()
@@ -438,7 +470,7 @@ const UPDATEINDICATOR = (country) => {
         g.selectAll(".tick text").attr("x", -70).attr("color", "white")
       );
 
-    // Give these new data to update line
+    // give new data to update line
     line2
       .data([pops])
       .transition()
@@ -457,7 +489,8 @@ const UPDATEINDICATOR = (country) => {
       )
       .attr("stroke", "blue");
   });
-}
+};
 
+// create line chart and navigator
 CREATELINECHART("China", pops, svg);
 CREATEINDICATOR("China");
