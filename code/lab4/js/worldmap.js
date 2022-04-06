@@ -117,7 +117,7 @@ function createMap() {
       )
       .range([2, 20]);
 
-    // set circle colour to be a quantile scale by population
+    // set circle colour to be a quantile scale by populations
     var scaleColor = d3
       .scaleQuantile()
       .domain(
