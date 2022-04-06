@@ -1,3 +1,10 @@
+/*
+Author: Callum Taylor
+Filename: piecharts.js
+License: MIT Open Source License
+*/
+
+
 // declare pie chart constants
 
 var colors = {

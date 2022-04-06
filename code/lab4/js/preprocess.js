@@ -1,3 +1,10 @@
+/*
+Author: Callum Taylor
+Filename: preprocess.js
+License: MIT Open Source License
+*/
+
+
 // read population data as csv file
 const POPDATA = d3.csv(
   "https://raw.githubusercontent.com/taybluetooth/taybluetooth.github.io/main/code/data/population.csv"

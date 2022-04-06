@@ -1,3 +1,10 @@
+/*
+Author: Callum Taylor
+Filename: linechart.js
+License: MIT Open Source License
+*/
+
+
 // declare global values
 
 // declare line charts dimensions

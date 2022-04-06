@@ -1,3 +1,9 @@
+/*
+Author: Callum Taylor
+Filename: worldmap.js
+License: MIT Open Source License
+*/
+
 // declare map constants
 const MAPWIDTH = 600;
 const MAPHEIGHT = 500;
