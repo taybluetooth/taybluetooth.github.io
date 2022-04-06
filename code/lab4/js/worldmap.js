@@ -71,10 +71,10 @@ function createMap() {
     // store countries as a feature
     const countries = topojson.feature(data, data.objects.countries);
     // declare an initially selected country
-    MAPG.selectAll("PATH")
+    MAPG.selectAll("path")
       .data(countries.features)
       .enter()
-      .append("PATH")
+      .append("path")
       .attr("class", function (d) {
         return d.properties.name == "China"
           ? `selected ${d.properties.name.replace(/\s/g, "")}`
